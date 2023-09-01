@@ -42,9 +42,11 @@
 class RickAndMortyService {
     // el constructor debe inicializar una variable con la url de acceso base al API
 
-	constructor() {}
+    constructor() {
+        this.baseUrl = 'https://rickandmortyapi.com/api/character';
+    }
 
-    
+
     // este método deberá llamar al servicio y obtener los personajes
     // deberá devolver un objeto de la siguiente manera
 
@@ -76,9 +78,28 @@ class RickAndMortyService {
     //  const mispersonajes = await response.json();
 
     // valor (1 punto)
-	getAllCharacters() {
+    async getAllCharacters() {
         // aqui va tu llamado al API usando fetch puedes usar promesas o asycn/await
-	}
+       
+        return await fetch(this.baseUrl)
+        .then((respuesta) => respuesta.json())
+            .then((info) => {
+               const personajes = info.results.map(personaje => ({
+                    name: personaje.name,
+                    status: personaje.status,
+                    species: personaje.species,
+                    firstSeen: personaje.origin.name,
+                    location: personaje.location.name,
+                    image: personaje.image,
+                    student: "Daniela Puerto Diaz",
+                    code: "0000 220606"
+               }));
+               return personajes;
+            }).catch(error => {
+                throw new Error("Error obteniendo personajes: ", error);
+            });
+        
+    }
 }
 
 export default RickAndMortyService;
